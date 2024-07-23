@@ -1,0 +1,14 @@
+.script--header {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 2rem;
+}
+.script--content {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.executeButton {
+	width: fit-content;
+}

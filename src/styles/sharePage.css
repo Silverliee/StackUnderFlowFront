@@ -1,0 +1,19 @@
+.script--header {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 2rem;
+}
+
+.form_description {
+	display: flex;
+	align-content: flex-start;
+	gap: 10px;
+}
+
+.input-readonly {
+	background-color: #f0f0f0; /* Light gray background */
+	color: #888888; /* Gray text color */
+	border: 1px solid #ccc; /* Light gray border */
+	cursor: not-allowed; /* Change cursor to indicate it's not editable */
+}
