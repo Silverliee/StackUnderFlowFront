@@ -17,7 +17,7 @@ class SocketManager {
     connectWebSocketPipeline(pipelineId, messageCallback, launchPipelineMethod) {
 
         this.messageCallback = messageCallback;
-        const url = `ws://localhost:5008/notifications?id=${pipelineId}`;
+        const url = `${import.meta.env.VITE_WS_URL}notifications?id=${pipelineId}`;
         this.socket = new WebSocket(url);
 
         this.socket.onopen = async () => {
