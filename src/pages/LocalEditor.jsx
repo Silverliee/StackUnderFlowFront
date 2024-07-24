@@ -60,7 +60,6 @@ function LocalEditor() {
 
 	function handleSaveAndDownload() {
 		const element = document.createElement("a");
-		console.log("newFileValue", newFileValue);
 		const file = new Blob([newFileValue], { type: "text/plain" });
 		element.href = URL.createObjectURL(file);
 		element.download = fileName;

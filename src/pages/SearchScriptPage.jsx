@@ -53,9 +53,6 @@ function SearchScriptPage() {
 
 	const handleSelectChangeVisibility = (event) => {
 		const value = event?.target?.innerHTML; // Get the selected value
-		console.log({visibility,
-		value,
-		event});
 		setVisibility(value);
 	};
 

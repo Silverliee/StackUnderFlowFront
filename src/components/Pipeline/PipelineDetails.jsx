@@ -9,6 +9,7 @@ import AxiosRequester from "../../Axios/AxiosRequester.js";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload.js";
 import * as React from "react";
 import Button from "@mui/material/Button";
+import {enqueueSnackbar} from "notistack";
 
 const PipelineDetails = () => {
     const indexRef = useRef(0);
@@ -23,12 +24,8 @@ const PipelineDetails = () => {
     useEffect(() => {
         if (state.pipelines[pipelineId]) {
             if(state.pipelines[pipelineId].result !== null && state.pipelines[pipelineId].result !== undefined) {
-                console.log("Consult details mode");
-                console.log(state.pipelines[pipelineId]);
                 setPipelineFinished(true);
             } else {
-                console.log('HI');
-                console.log(state.pipelines[pipelineId]);
                 scriptsRef.current = state.pipelines[pipelineId].scriptsId;
                 indexRef.current = state.pipelines[pipelineId].index;
                 inputRef.current = state.pipelines[pipelineId].input;
@@ -54,9 +51,12 @@ const PipelineDetails = () => {
         let newScriptList = scriptsRef.current;
         let index = indexRef.current;
         // Mise à jour de l'état des scripts en fonction du message reçu
-        if (messageAsArray.includes("successfully")) {
-            newScriptList[index].status = "Done";
-            newScriptList[index].result = "success";
+        if (messageAsArray.includes("successfully") || messageAsArray.includes("completed")) {
+            if(index < newScriptList.length) {
+
+                newScriptList[index].status = "Done";
+                newScriptList[index].result = "success";
+            }
             color = 'green';
             index++;
 
@@ -74,6 +74,9 @@ const PipelineDetails = () => {
                 newScriptList[index].status = "Done";
                 newScriptList[index].result = "error";
             }
+            const variant = 'error';
+            let text = "Issue with the pipeline.";
+            enqueueSnackbar(text, {variant, autoHideDuration: 2000});
             color = 'red';
 
             while (index + 1 < newScriptList.length) {
@@ -103,7 +106,6 @@ const PipelineDetails = () => {
     };
 
     const launchPipelineMethod = async () => {
-        console.log('launch');
         const formData = new FormData();
         formData.append("PipelineId", pipelineId);
 
@@ -133,12 +135,6 @@ const PipelineDetails = () => {
         });
     }
 
-    //TODO:
-    // Peut-être lié l'index ici avec un tableau setté dans handleWebSocketMessage lorsque l'on reçoit le lien ou le binary
-    const handleDownload = (index) => {
-        console.log(index);
-    };
-
     return (
         <>
             <div>Pipeline n°{pipelineId}</div>
@@ -152,7 +148,7 @@ const PipelineDetails = () => {
                     overflow: 'auto'
                 }}>
                     {scriptsRef.current.map((item, index) => (
-                        <PipelineItem key={index} script={item} index={index} handleDownload={handleDownload}/>
+                        <PipelineItem key={index} script={item} index={index}/>
                     ))}
                     {pipelineFinished && (
                         <Button style={{cursor:"pointer"}} onClick={() => handleFile(state.pipelines[pipelineId].result)}>

@@ -93,10 +93,6 @@ function ScriptListPage() {
     ]);
 
     useEffect(() => {
-        console.log({pipelines:state.pipelines})
-    }, [state]);
-
-    useEffect(() => {
         setScriptsFoundPaginated(
             scriptsFoundFiltered.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
         );
@@ -138,9 +134,6 @@ function ScriptListPage() {
             setInput(selectedFile);
             const type = getInputFileType(selectedFile);
             if (selectedScriptsTag.length > 0) {
-                console.log(selectedScriptsTag[0].inputScriptType);
-                console.log(type);
-                console.log(selectedScriptsTag[0].inputScriptType !== type ? 'error':'info');
                 setButtonType(selectedScriptsTag[0].inputScriptType !== type ? 'error':'info');
             }
         } else {
@@ -165,12 +158,12 @@ function ScriptListPage() {
     }
 
     const getInputFileType = (selectedFile) => {
-        if (input) {
-            const tab = input.name.split(".");
-            return "." + tab[tab.length-1];
-        }
         if (selectedFile){
             const tab = selectedFile.name.split(".");
+            return "." + tab[tab.length-1];
+        }
+        if (input) {
+            const tab = input.name.split(".");
             return "." + tab[tab.length-1];
         }
         return "";

@@ -7,10 +7,12 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
 import {enqueueSnackbar} from "notistack";
+import {handleFile} from "../utils/utils.js";
 
 function ExecutionPage() {
 	const [file, setFile] = useState(null);
 	const [input,setInput] = useState(null);
+	const [result, setResult] = useState(null);
 
 	const acceptedFiles = [".py", ".csx"];
 
@@ -39,12 +41,16 @@ function ExecutionPage() {
 		if(input) {
 			formData.append("input", input);
 		}
-		const result = await AxiosRq.getInstance().executeScript(formData);
+
+		const res = await AxiosRq.getInstance().executeScript(formData);
+		setResult(res);
 	};
 	function handleChange(event) {
 		setFile(null);
 		const selectedFile = event.target.files[0];
-		if (selectedFile && selectedFile.type) {
+		const type = selectedFile?.name?.split('.');
+
+		if (type && type[type.length - 1] === 'csx' || type[type.length - 1] === 'py') {
 			setFile(selectedFile);
 		} else {
 			const variant = 'error';
@@ -59,6 +65,12 @@ function ExecutionPage() {
 		} else {
 			const variant = 'error';
 			enqueueSnackbar("Invalid file type",{variant, autoHideDuration: 2000})
+		}
+	}
+
+	const handleDownload = () => {
+		if(result){
+			handleFile(result,'text/plain');
 		}
 	}
 
@@ -96,20 +108,19 @@ function ExecutionPage() {
 						</Button>
 						<p style={{marginLeft: "10px"}}>{file?.name}</p>
 					</div>
-					<div style={{
-						display: "flex", alignItems:"center"}}>
+					{result &&(<div style={{
+						display: "flex", alignItems: "center"
+					}}>
 						<Button component="label"
 								role={undefined}
 								variant="contained"
 								tabIndex={-1}
-						>Input
-							<VisuallyHiddenInput
-								type="file"
-								onChange={handleChangeInput}
-							/>
+								onClick={handleDownload}
+						>Download Result
+							<CloudUploadIcon/>
 						</Button>
-						<p style={{marginLeft: "10px"}}>{input?.name}</p>
-					</div>
+						<p>{result}</p>
+					</div>)}
 				</div>
 				<Button
 					component="label"

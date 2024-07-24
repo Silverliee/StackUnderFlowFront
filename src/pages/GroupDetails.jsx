@@ -63,17 +63,9 @@ function GroupDetails() {
 	};
 
 	useEffect(() => {
-		console.log({
-			page,
-			rowsPerPage,
-			members,
-			length: members.length,
-		});
 		if((page) * rowsPerPage > members.length) {
-			console.log('here');
 			setPage(page-1);
 		} else {
-			console.log('there');
 			setMembersPaginated(
 				members.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
 			)
@@ -83,11 +75,6 @@ function GroupDetails() {
 		setOpenAlert(false);
 		await AxiosRq.getInstance().cancelGroupInvitation(group.groupId,userIdToRemove);
 		const variant = 'success';
-		console.log({
-			userIdToRemove,
-			membersFiltered: members.filter((member) => member.userId !== userIdToRemove),
-				members
-		});
 		setMembers(members.filter((member) => member.userId !== userIdToRemove));
 		setUserIdToRemove(null);
 		let text = `User removed successfully from group.`;

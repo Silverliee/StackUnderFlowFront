@@ -61,15 +61,6 @@ const SharingPage = ({ script }) => {
 	};
 
 	const handleSubmitEvent = async () => {
-		console.log("submitting", {
-			scriptName,
-			description,
-			language,
-			inputType,
-			outputType,
-			visibility,
-			file,
-		});
 		let inputTypeFormatted = inputType.length > 1 ? inputType.filter((item) => item !== "None") : inputType
 		let outputTypeFormatted = outputType.length > 1 ? outputType.filter((item) => item !== "None") : outputType
 
@@ -127,14 +118,18 @@ const SharingPage = ({ script }) => {
 	async function handleChangeFile(event) {
 		setFile(null);
 		const selectedFile = event.target.files[0];
-		if (selectedFile && selectedFile.type) {
+		if (selectedFile) {
 			const fileExtension = selectedFile.name.split(".").pop();
 			if (fileExtension === "py") {
 				setLanguage("Python");
+				setFile(selectedFile);
 			} else if (fileExtension === "csx") {
 				setLanguage("Csharp");
+				setFile(selectedFile);
+			} else {
+				const variant = 'error';
+				enqueueSnackbar("Invalid file type", {variant, autoHideDuration: 2000});
 			}
-			setFile(selectedFile);
 		} else {
 			const variant = 'error';
 			enqueueSnackbar("Invalid file type", {variant, autoHideDuration: 2000});

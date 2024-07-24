@@ -1,16 +1,20 @@
 import React, {useEffect} from 'react';
-import { Container, Box, TextField, Button, Typography, Link } from '@mui/material';
+import {Container, Box, TextField, Button, Typography, Link, Modal, Backdrop, Fade} from '@mui/material';
 import {useNavigate} from "react-router-dom";
 import { useAuth } from "../hooks/AuthProvider";
 import {isEmailAvailable, isUsernameAvailable, isValidEmail} from "../utils/utils";
 import RegisterModal from "../components/RegisterModal";
 import {enqueueSnackbar} from "notistack";
 import NewRegisterModal from "../components/NewRegisterModal.jsx";
+import ForgottenPasswordModal from "../components/ForgottenPasswordModal.jsx";
+import AxiosRequester from "../Axios/AxiosRequester.js";
 
 const NewLogin = () => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [open, setOpen] = React.useState(false);
+    const [openForgottenPassword, setOpenForgottenPassword] = React.useState(false);
+    const [forgottenPasswordEmail, setForgottenPasswordEmail] = React.useState("");
     const [username, setUsername] = React.useState("");
     const [emailRegister, setEmailRegister] = React.useState("");
     const [passwordRegister, setPasswordRegister] = React.useState("");
@@ -24,6 +28,18 @@ const NewLogin = () => {
             navigateDashboard();
         }
     });
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
 
     const navigateDashboard = () => navigate("/home", { replace: true });
 
@@ -83,6 +99,32 @@ const NewLogin = () => {
         }
         enqueueSnackbar(text, {variant, autoHideDuration: 2000});
     };
+
+    const handleCloseForgottenPassword = () => {
+        setForgottenPasswordEmail("");
+        setOpenForgottenPassword(false);
+    }
+
+    const handleForgottenPassword = async () => {
+        if (!isValidEmail(forgottenPasswordEmail)) {
+            const variant = 'error';
+            let text = "Incorrect email syntax"
+            enqueueSnackbar(text, {variant, autoHideDuration: 2000});
+        } else {
+            const result = await AxiosRequester.getInstance().retrieveForgottenPasswordByEmail(forgottenPasswordEmail);
+            if(result) {
+                const variant = 'success';
+                let text = "Email has been sent to your email address";
+                enqueueSnackbar(text, {variant, autoHideDuration: 2000});
+            } else {
+                const variant = 'error';
+                let text = "There was an issue with your request";
+                enqueueSnackbar(text, {variant, autoHideDuration: 2000});
+            }
+            handleCloseForgottenPassword();
+        }
+    }
+
     return (
         <>
             <Container
@@ -128,7 +170,6 @@ const NewLogin = () => {
                             fullWidth
                             sx={{mb: 2}}
                             onChange={(event) => {
-                                console.log(event);
                                 setEmail(event.target.value);
                             }}
                             value={email}
@@ -146,9 +187,9 @@ const NewLogin = () => {
                                 disabled={!email || !password}>
                             Se connecter
                         </Button>
-                        <Link href="#" sx={{mb: 2}}>
+                        <Button onClick={() => setOpenForgottenPassword(true)} sx={{mb: 2}}>
                             Mot de passe oublié ?
-                        </Link>
+                        </Button>
                         <Button variant="contained" color="success" fullWidth onClick={() => setOpen(true)}>
                             Créer nouveau compte
                         </Button>
@@ -168,6 +209,7 @@ const NewLogin = () => {
                 password2={passwordRegister2}
                 setPassword2={setPasswordRegister2}
             />
+            <ForgottenPasswordModal open={openForgottenPassword} handleClose={handleCloseForgottenPassword} email={forgottenPasswordEmail} setEmail={setForgottenPasswordEmail} handleSubmitRegisterEvent={handleForgottenPassword}/>
         </>
     );
 };

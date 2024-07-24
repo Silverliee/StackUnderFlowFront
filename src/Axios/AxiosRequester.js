@@ -1,15 +1,16 @@
 import axios from "axios";
 import { getBase64 } from "../utils/utils";
 
+
 class AxiosRequester {
 	token = null;
-	baseUrl = "http://localhost:5008/";
+	baseUrl = import.meta.env.VITE_API_URL;
 	_instance = null;
 
 	constructor() {}
 
 	setToken(token) {
-		console.log("Bearer " +token);
+		//console.log("Bearer " +token);
 		this.token = token;
 	}
 
@@ -46,7 +47,7 @@ class AxiosRequester {
 			//console.log("Réponse de l'API :", { response: response.data });
 			return response.data;
 		} catch (error) {
-			console.error("Erreur lors de la requête :", error);
+			//console.error("Erreur lors de la requête :", error);
 		}
 	};
 	/*
@@ -63,7 +64,7 @@ class AxiosRequester {
 			//console.log("Réponse de l'API :", { response: response.data });
 			return response.data;
 		} catch (error) {
-			console.error("Erreur lors de la requête :", error);
+			//console.error("Erreur lors de la requête :", error);
 		}
 	};
 
@@ -90,7 +91,7 @@ class AxiosRequester {
 			//console.log("Réponse de l'API :", { response: response.data });
 			return response.data;
 		} catch (error) {
-			console.error("Erreur lors de la requête :", error);
+			//console.error("Erreur lors de la requête :", error);
 		}
 	};
 
@@ -120,7 +121,7 @@ class AxiosRequester {
 			//console.log("Réponse de l'API :", { response: response.data });
 			return response.data;
 		} catch (error) {
-			console.error("Erreur lors de la requête :", error);
+			//console.error("Erreur lors de la requête :", error);
 		}
 	};
 
@@ -134,7 +135,7 @@ class AxiosRequester {
 			//console.log("Réponse de l'API :", { response: response.data });
 			return response.data;
 		} catch (error) {
-			console.error("Erreur lors de la requête :", error);
+			//console.error("Erreur lors de la requête :", error);
 		}
 	};
 
@@ -158,7 +159,7 @@ class AxiosRequester {
 			const response = await axios.get(apiUrl, this.getConfig());
 			return response.data;
 		} catch (error) {
-			console.log("Erreur lors de la requête:", error);
+			//console.log("Erreur lors de la requête:", error);
 		}
 	}
 
@@ -856,6 +857,19 @@ class AxiosRequester {
 				},
 				responseType: 'blob'
 			});
+			if (response.status === 200) {
+				return response.data;
+			}
+		} catch (error) {
+			console.error("Erreur lors de la requete \"execute pipeline\":",error);
+		}
+	}
+
+	retrieveForgottenPasswordByEmail = async (email) => {
+		const apiUrl = this.baseUrl + `User/forgot-password`;
+		console.log('Axios forgottenPasswordByEmail');
+		try {
+			const response = await axios.post(apiUrl, {email}, this.getConfig());
 			if (response.status === 200) {
 				return response.data;
 			}

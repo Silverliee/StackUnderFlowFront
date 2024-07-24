@@ -18,7 +18,7 @@ const ScriptVersionModal = ({
 	comment,
 	version,
 }) => {
-	const acceptedFiles = script.language === "Python" ? ".py" : ".cs";
+	const acceptedFiles = script.language === "Python" ? ".py" : ".csx";
 
 	const style = {
 		position: "absolute",

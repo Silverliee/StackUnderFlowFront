@@ -122,7 +122,6 @@ function ProfilePage() {
 			password === confirmedPassword &&
 			hasChangedOccurred()
 		) {
-			console.log("open password check");
 			//open password check validation modal
 			handleOpen();
 		} else if (!hasChangedOccurred()) {

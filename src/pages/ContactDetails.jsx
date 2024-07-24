@@ -34,15 +34,12 @@ const ContactDetails = () => {
     });
 
     useEffect(() => {
-        console.log(currentPath);
-        console.log(contactType());
         getUserInfo();
         getUserScripts();
     }, [userId]);
 
     const getUserInfo = async () => {
         const user = await AxiosRequester.getInstance().getUserById(userId);
-        console.log({ user, userId });
         if (user !== null) {
             setUserDetails(user);
         }

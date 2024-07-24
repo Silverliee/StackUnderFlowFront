@@ -27,7 +27,6 @@ function ProfileBanner({ username }) {
 	const getMessages = async () => {
 		const groupRequests = await AxiosRq.getInstance().getGroupRequests();
 		const friendRequests = await AxiosRq.getInstance().getFriendRequests();
-		console.log({ groupRequests, friendRequests });
 		if (groupRequests?.length === 0 && friendRequests?.length === 0) {
 			setHasUnreadMessages(false);
 		} else {

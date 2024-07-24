@@ -41,7 +41,6 @@ export default function PostItem({post}) {
     const userId = authData.userId;
 
     useEffect(() => {
-        console.log(post);
         fetchComments()
     },[post.scriptId]);
 
@@ -109,7 +108,6 @@ export default function PostItem({post}) {
 
     const handleFavorite = async (scriptId) => {
         const result = await AxiosRq.getInstance().putAsFavoriteScript(scriptId);
-        console.log(result);
         if(result){
             setIsFavorite(true);
         }
