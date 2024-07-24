@@ -72,7 +72,7 @@ export default function PostItem({post}) {
     }
 
     const handleDownload = async () => {
-        const data = await AxiosRq.getInstance().getScriptVersionBlob(
+        const data = await AxiosRq.getInstance().getScriptBlob(
             post.scriptId
         );
         const element = document.createElement("a");

@@ -30,7 +30,7 @@ export const ScriptItem = ({
 
 	const handleDownload = async (event) => {
 		event.stopPropagation(); // Empêche la propagation de l'événement au ListItem parent
-		const data = await AxiosRq.getInstance().getScriptVersionBlob(script.scriptId);
+		const data = await AxiosRq.getInstance().getScriptBlob(script.scriptId);
 		const element = document.createElement("a");
 		const file = new Blob([data], { type: "text/plain" });
 		element.href = URL.createObjectURL(file);
